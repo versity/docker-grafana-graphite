@@ -100,6 +100,10 @@ EXPOSE  8126
 # Graphite web port
 EXPOSE 81
 
+# expose direct Carbon ports (line & pickle)
+EXPOSE 2003
+EXPOSE 2004
+
 
 
 # -------- #
