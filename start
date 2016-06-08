@@ -15,9 +15,16 @@ PORT_START=${PORT_START:-8900}
 GR_WEB=$PORT_START
 GR_ADMIN=$((GR_WEB + 1))
 
+# Carbon (Graphite backend) line & pickle ports
+CARBON=$((GR_WEB + 3))
+CARBONP=$((CARBON + 1))
+
 # starts at 8925, 8926
 STATD=$((PORT_START + 25))
 STATD_ADMIN=$((STATD + 1))
 
 # local dir for logs, so nice!
-docker run -d -v $(pwd)/logs:/var/log/supervisor -p $GR_WEB:80 -p $GR_ADMIN:81 -p $STATD:8125/udp -p $STATD_ADMIN:8126 --name $CONTAINER_NAME vsm/graphite_grafana:latest
+GR_PORTS="-p $GR_WEB:80  -p $GR_ADMIN:81"
+CARBON_PORTS="-p $CARBON:2003 -p $CARBONP:2004"
+STATD_PORTS="-p $STATD:8125/udp -p $STATD_ADMIN:8126"
+docker run -d -v $(pwd)/logs:/var/log/supervisor $GR_PORTS $CARBON_PORTS $STATD_PORTS --name $CONTAINER_NAME vsm/graphite_grafana:latest
